@@ -2,6 +2,8 @@
 
 First flutter application
 
+![App Screenshot](https://drive.google.com/uc?id=1RZKGezkdDujc3Y_XasnEBj3HGVBTbVSX)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
