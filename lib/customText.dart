@@ -20,7 +20,7 @@ class _CustomTextState extends State<CustomText> {
       children: [
         Expanded(
           child: Card(
-            elevation: 3,
+            elevation: 1.5,
             shadowColor: Colors.grey[400],
             child: Padding(
               padding: const EdgeInsets.all(20.0),

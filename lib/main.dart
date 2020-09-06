@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:first_flutter/customText.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:analog_clock/analog_clock.dart';
 
 void main() => runApp(MaterialApp(
   home: Home(),
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> {
     });
 
     WorldTime worldTime = WorldTime(url: "Asia/Kolkata");
-    await worldTime.getData();
+    await worldTime.getData(DateTime.now().millisecond);
 
     setState(() {
       this.worldTime = worldTime;
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 
     loadingIndicator = Card(
-      elevation: 5,
+      elevation: 10,
       child: Container(
         width: 175, height: 80,
         color: Colors.grey[50],
@@ -88,7 +89,7 @@ class _HomeState extends State<Home> {
                       CustomText(
                         worldTime.url == null ? "" : this.worldTime.url,
                         textStyle: TextStyle(
-                          color: Colors.amber[400],
+                          color: Colors.amberAccent,
                           fontWeight: FontWeight.bold,
                           fontSize: 24,
                         ),
@@ -96,50 +97,46 @@ class _HomeState extends State<Home> {
 
                       Expanded( flex: 1, child: SizedBox()),
 
+                      AnalogClock(
+
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topRight,
+                              colors: [Colors.lightGreenAccent[200], Colors.amberAccent[100], Colors.deepOrangeAccent]),
+                          shape: BoxShape.rectangle,
+                          color: Colors.grey[100],
+                        ),
+                        isLive: true,
+                        width: 200, height: 200,
+                        tickColor: Colors.black,
+                        textScaleFactor: 1.25,
+                        showDigitalClock: true,
+                        datetime: worldTime.dateTime,
+                      ),
+
+                      Expanded( flex: 2, child: SizedBox()),
+
                       CustomText(
                         worldTime.dateTime == null || worldTime.day==null ? "" :
-                          "Date = ${worldTime.dateTime.day} ${getMonth(worldTime.dateTime.month)} "
-                              "${worldTime.dateTime.year}\n${getDay(worldTime.day)}",
+                          "${worldTime.dateTime.day} ${getMonth(worldTime.dateTime.month)} "
+                              "${worldTime.dateTime.year} - ${getDay(worldTime.day)}",
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 14,
                         ),
                       ),
 
                       Expanded( flex: 1, child: SizedBox()),
-
-                      CustomText(
-                        worldTime.dateTime == null ? "" :
-                                        "Time = ${getHour(worldTime.dateTime.hour)}:${getTimeFormated(worldTime.dateTime.minute)}"
-                                            ":${getTimeFormated(worldTime.dateTime.second)} ${getAMorPM(worldTime.dateTime.hour)}",
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18
-                        ),
-                      ),
-
-                      Expanded( flex: 1, child: SizedBox()),
-
-                      CustomText(
-                        worldTime.url==null ? "" : "Some facts on 'now'",
-                        textStyle: TextStyle(
-                            fontSize: 12
-                        ),
-                      ),
 
                       CustomText(
                         worldTime.noOfDays==null || worldTime.noOfWeeks==null ? "" :
-                                      "This moment is the ${this.worldTime.noOfDays} ${getSuffix(this.worldTime.noOfDays)} day"
-                                          "\nand ${this.worldTime.noOfWeeks} ${getSuffix(this.worldTime.noOfWeeks)} week of the year!"
+                                      "Today is the ${this.worldTime.noOfDays}${getSuffix(this.worldTime.noOfDays)} day"
+                                          "\nand ${this.worldTime.noOfWeeks}${getSuffix(this.worldTime.noOfWeeks)} week of the year!"
                                           "\nin ${this.worldTime.url}",
-                        textStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16
-                        ),
+                        textStyle: TextStyle(fontSize: 16),
                       ),
 
                       Expanded(
-                        flex: 4,
+                        flex: 2,
                         child: SizedBox(),
                       ),
 
@@ -206,10 +203,10 @@ class _HomeState extends State<Home> {
     return "December";
   }
 
-  String getTimeFormated(time) => time<10 ? "0" + time.toString() : time.toString();
-
-  String getHour(hour) => hour>12 ? (hour-12).toString() : getTimeFormated(hour) ;
-
-  String getAMorPM(hour) => hour>=12 ? "PM" : "AM";
+  // String getTimeFormated(time) => time<10 ? "0" + time.toString() : time.toString();
+  //
+  // String getHour(hour) => hour>12 ? (hour-12).toString() : getTimeFormated(hour) ;
+  //
+  // String getAMorPM(hour) => hour>=12 ? "PM" : "AM";
 
 }

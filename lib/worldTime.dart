@@ -20,7 +20,7 @@ class WorldTime {
 // "utc_offset":"+09:30","week_number":36}
 
 
-  Future<void> getData() async {
+  Future<void> getData(curTime) async {
 
     Map body;
     try {
@@ -44,6 +44,12 @@ class WorldTime {
     bool isPositive = utcOffset[0]=='+';
     int hr = int.parse(utcOffset.substring(1, 3));
     int mins = int.parse(utcOffset.substring(4, 6));
+
+    // Minimises the time lag
+    int curMilli = DateTime.now().millisecond;
+    int milli = curMilli > curTime ? curMilli - curTime : 1000 + curMilli - curTime;
+    now = now.add(Duration(milliseconds:  milli));
+
     this.dateTime = isPositive ? now.add(Duration(hours: hr, minutes: mins)) :
                               now.subtract(Duration(hours: hr, minutes: mins));
   }
